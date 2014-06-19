@@ -1,0 +1,31 @@
+<!DOCTYPE html>  <html> <head>   <title>server.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="requestHandlers.html">                 requestHandlers.js               </a>                                           <a class="source" href="router.html">                 router.js               </a>                                           <a class="source" href="server.html">                 server.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               server.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">   Main server module.</span>
+
+<span class="cm">   @author Maciej Reichwald</span>
+<span class="cm"> */</span>
+
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">),</span>
+    <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">),</span>
+    <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Starts server.</span>
+
+<span class="cm">   @param {Object} route Router module object.</span>
+<span class="cm">   @param {Array} handle Contains key strings that redirect to specified function from requestHandlers module.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">handle</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">pathname</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">pathname</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Request for &quot;</span><span class="o">+</span><span class="nx">pathname</span><span class="o">+</span><span class="s2">&quot; received.&quot;</span><span class="p">);</span>
+    <span class="nx">route</span><span class="p">(</span><span class="nx">handle</span><span class="p">,</span> <span class="nx">pathname</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
+    
+
+  <span class="p">}</span> <span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">22210</span><span class="p">);</span>
+  
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Server has started.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

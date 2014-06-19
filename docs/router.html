@@ -1,0 +1,32 @@
+<!DOCTYPE html>  <html> <head>   <title>router.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="requestHandlers.html">                 requestHandlers.js               </a>                                           <a class="source" href="router.html">                 router.js               </a>                                           <a class="source" href="server.html">                 server.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               router.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">   Module that redirects server request to specified handler function in requestHandlers module.</span>
+
+<span class="cm">   @author Maciej Reichwald</span>
+<span class="cm"> */</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Redirects to requested function, if it exists.</span>
+
+<span class="cm">   @param {Array} handle Contains key strings that redirect to specified function from requestHandlers module.</span>
+<span class="cm">   @param {String} pathname Contains key string for handle array.</span>
+<span class="cm">   @param {Object} request Request object sent from caller.</span>
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">route</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">handle</span><span class="p">,</span> <span class="nx">pathname</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">request</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;About to route request for &quot;</span> <span class="o">+</span> <span class="nx">pathname</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span> <span class="k">typeof</span> <span class="nx">handle</span><span class="p">[</span><span class="nx">pathname</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">handle</span><span class="p">[</span><span class="nx">pathname</span><span class="p">](</span><span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">pathname</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;/message&quot;</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">handle</span><span class="p">[</span><span class="s2">&quot;/message&quot;</span><span class="p">](</span><span class="nx">response</span><span class="p">,</span><span class="nx">request</span><span class="p">);</span>
+  <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">pathname</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="nx">pathname</span> <span class="o">+=</span> <span class="s2">&quot;index.html&quot;</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">pathname</span> <span class="o">!=</span> <span class="s2">&quot;/favicon.ico&quot;</span> <span class="p">)</span>
+        <span class="nx">handle</span><span class="p">[</span><span class="s2">&quot;load_file&quot;</span><span class="p">](</span><span class="nx">pathname</span><span class="p">,</span><span class="nx">response</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

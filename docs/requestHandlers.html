@@ -1,0 +1,152 @@
+<!DOCTYPE html>  <html> <head>   <title>requestHandlers.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="requestHandlers.html">                 requestHandlers.js               </a>                                           <a class="source" href="router.html">                 router.js               </a>                                           <a class="source" href="server.html">                 server.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               requestHandlers.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">   Module responsible for handling url requests specified in index.js module.</span>
+
+<span class="cm">   @author Maciej Reichwald</span>
+<span class="cm"> */</span>
+ 
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;fs&quot;</span><span class="p">),</span>
+    <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">),</span>
+    <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">),</span>
+    <span class="nx">formidable</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;formidable&quot;</span><span class="p">),</span>
+    <span class="nx">database</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../database/database&quot;</span><span class="p">),</span>
+    <span class="nx">messageHandler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;../messages/messageHandler&quot;</span><span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Displays intro page.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @param {Object} request Request object sent from caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">postData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Request handler &#39;start&#39; was called.&quot;</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="s1">&#39;&lt;html&gt;&#39;</span><span class="o">+</span>
+  <span class="s1">&#39;&lt;head&gt;&#39;</span><span class="o">+</span>
+    <span class="s1">&#39;&lt;meta http-equiv=&quot;Content-Type&quot; &#39;</span><span class="o">+</span>
+    <span class="s1">&#39;content=&quot;text/html; charset=UTF-8&quot; /&gt;&#39;</span> <span class="o">+</span>
+  <span class="s1">&#39;&lt;/head&gt;&#39;</span><span class="o">+</span>
+  <span class="s1">&#39;&lt;body&gt;&#39;</span><span class="o">+</span>
+    <span class="s1">&#39;&lt;form action=&quot;/upload&quot; enctype=&quot;multipart/form-data&quot; method=&quot;post&quot;&gt;&#39;</span><span class="o">+</span>
+    <span class="s1">&#39;&lt;input type=&quot;file&quot; name=&quot;upload&quot; multiple=&quot;multiple&quot;&gt;&#39;</span><span class="o">+</span>
+    <span class="s1">&#39;&lt;input type=&quot;submit&quot; value=&quot;Upload file&quot; /&gt;&#39;</span><span class="o">+</span>
+    <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="o">+</span>
+  <span class="s1">&#39;&lt;/body&gt;&#39;</span><span class="o">+</span>
+  <span class="s1">&#39;&lt;/html&gt;&#39;</span><span class="p">;</span>
+
+  <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/html&quot;</span><span class="p">});</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Displays test upload page.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @param {Object} request Request object sent from caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">upload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Request handler &#39;upload&#39; was called&quot;</span><span class="p">);</span>
+  
+  <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">formidable</span><span class="p">.</span><span class="nx">IncomingForm</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;about to parse&quot;</span><span class="p">);</span>
+  <span class="nx">form</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;parsing done&quot;</span><span class="p">);</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">rename</span><span class="p">(</span><span class="nx">files</span><span class="p">.</span><span class="nx">upload</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="s2">&quot;./assets/test.png&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">unlink</span><span class="p">(</span><span class="s2">&quot;./assets/test.png&quot;</span><span class="p">);</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">rename</span><span class="p">(</span><span class="nx">files</span><span class="p">.</span><span class="nx">upload</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="s2">&quot;./assets/test.png&quot;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/html&quot;</span><span class="p">});</span> 
+    <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;Received image:&lt;br/&gt;&quot;</span><span class="p">);</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;&lt;img src=&#39;/show&#39; /&gt;&quot;</span><span class="p">);</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Displays tables listed in database.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @param {Object} request Request object sent from caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">database_test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">shouldInit</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span> <span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">url_query</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+        <span class="nx">shouldInit</span> <span class="o">=</span> <span class="nx">url_query</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">init</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">database</span><span class="p">.</span><span class="nx">load_customers</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">shouldInit</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Redirects message to message handler module.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @param {Object} request Request object sent from caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">messageHandler</span><span class="p">.</span><span class="nx">handleMessage</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Displays test page with uploaded images.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Request handler &#39;show&#39; was called&quot;</span><span class="p">);</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">&quot;./assets/test.png&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">error</span><span class="o">+</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>   
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;image/png&quot;</span><span class="p">});</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">);</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Loads file specified in uri parameter.</span>
+
+<span class="cm">   @param {Object} uri Contains file url.</span>
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">load_static_file</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">uri</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>  
+    <span class="kd">var</span> <span class="nx">filename</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">cwd</span><span class="p">(),</span> <span class="nx">uri</span><span class="p">);</span>  
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Request for &quot;</span><span class="o">+</span><span class="nx">filename</span><span class="p">);</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>  
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>  
+            <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
+          <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;404 File not found\n&quot;</span><span class="p">);</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>  
+        <span class="p">}</span>  
+  
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">file</span><span class="p">)</span> <span class="p">{</span>  
+            <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>  
+                <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
+            <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">error</span><span class="o">+</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+          <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span> 
+                <span class="k">return</span><span class="p">;</span>  
+            <span class="p">}</span>  
+  
+            <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">);</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+        <span class="p">});</span>  
+    <span class="p">});</span>  
+<span class="p">}</span>  
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

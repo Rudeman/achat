@@ -1,0 +1,141 @@
+<!DOCTYPE html>  <html> <head>   <title>database.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="database.html">                 database.js               </a>                                           <a class="source" href="dbMsgHandler.html">                 dbMsgHandler.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               database.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">   Module responsible for database handling and execution.</span>
+<span class="cm">   </span>
+<span class="cm">   @author Maciej Reichwald</span>
+<span class="cm"> */</span>
+
+<span class="kd">var</span> <span class="nx">sqlite3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;node-sqlite3&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">dbMsgHandler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./dbMsgHandler&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">DATABASE_PATH</span> <span class="o">=</span> <span class="s2">&quot;./assets/sql/mobshareDB.db&quot;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sqlite3</span><span class="p">.</span><span class="nx">Database</span><span class="p">(</span><span class="nx">DATABASE_PATH</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;./assets/sql/initDB.sql&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Could not open file: %s&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">queries</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">);</span>
+
+            <span class="nx">db</span><span class="p">.</span><span class="nx">serialize</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">query_count</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;\r\n&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>var dbHandler = new dbMsgHandler.DBMsgHandler(queries[i], );</p>             </td>             <td class="code">               <div class="highlight"><pre>                    <span class="nx">db</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Query error: &quot;</span><span class="o">+</span><span class="nx">error</span><span class="p">);</span>
+                        <span class="p">}</span>
+
+                        <span class="nx">query_count</span><span class="o">--</span><span class="p">;</span>
+
+                        <span class="k">if</span><span class="p">(</span><span class="nx">query_count</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">db</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+                            <span class="nx">listAllTables</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">listAllTables</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sqlite3</span><span class="p">.</span><span class="nx">Database</span><span class="p">(</span><span class="nx">DATABASE_PATH</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&quot;SELECT name FROM sqlite_master WHERE type = &#39;table&#39;&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">record</span> <span class="k">in</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">record</span><span class="o">+</span><span class="s2">&quot;: &quot;</span><span class="o">+</span><span class="nx">records</span><span class="p">[</span><span class="nx">record</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">records</span><span class="p">[</span><span class="nx">record</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;\t&quot;</span><span class="o">+</span><span class="nx">prop</span><span class="o">+</span><span class="s2">&quot;: &quot;</span><span class="o">+</span><span class="nx">records</span><span class="p">[</span><span class="nx">record</span><span class="p">][</span><span class="nx">prop</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            
+            <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+            <span class="nx">db</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Shows all tables in database and can initialize database.</span>
+
+<span class="cm">   @param {Object} response Response object for caller.</span>
+<span class="cm">   @param {Boolean} shouldInit If true, database is initialized.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">load_customers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">shouldInit</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">shouldInit</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">init</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">listAllTables</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>        
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="kd">function</span> <span class="nx">makeQuery</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">endHandler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">queries</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">query_count</span> <span class="o">=</span> <span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">queries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="o">||</span> <span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">queries</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">records</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">query_count</span><span class="o">--</span><span class="p">;</span>
+                
+                <span class="k">if</span><span class="p">(</span> <span class="nx">query_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">db</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+                <span class="p">}</span>
+                
+                <span class="k">if</span><span class="p">(</span><span class="nx">handler</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">handler</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span><span class="nx">records</span><span class="p">);</span>
+                <span class="p">}</span>
+                
+                <span class="k">if</span><span class="p">(</span> <span class="nx">query_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">endHandler</span> <span class="o">!=</span> <span class="kc">null</span> <span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">endHandler</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span><span class="nx">records</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">});</span>  
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Runs specified query.</span>
+
+<span class="cm">   @param {String} query Query that will be executed in database. There can be multiple queries in one string separated by &#39;;&#39;.</span>
+<span class="cm">   @param {Object} handler Function that will be called after execution of each query.</span>
+<span class="cm">   @param {Object} endHandler Function that will be called after execution of all queries.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">runQuery</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">endHandler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">query</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sqlite3</span><span class="p">.</span><span class="nx">Database</span><span class="p">(</span><span class="nx">DATABASE_PATH</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">makeQuery</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">endHandler</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Expected query as a string&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm">   Runs specified query. If query string contains multiple queries, they will be executed one at a time in given order.</span>
+
+<span class="cm">   @param {String} query Query that will be executed in database. There can be multiple queries in one string separated by &#39;;&#39;.</span>
+<span class="cm">   @param {Object} handler Function that will be called after execution of each query.</span>
+<span class="cm">   @param {Object} endHandler Function that will be called after execution of all queries.</span>
+<span class="cm">   @api public</span>
+<span class="cm"> */</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">runQuerySerialized</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span><span class="nx">handler</span><span class="p">,</span><span class="nx">endHandler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span> <span class="k">typeof</span> <span class="nx">query</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sqlite3</span><span class="p">.</span><span class="nx">Database</span><span class="p">(</span><span class="nx">DATABASE_PATH</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">db</span><span class="p">.</span><span class="nx">serialize</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">makeQuery</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span><span class="nx">query</span><span class="p">,</span><span class="nx">handler</span><span class="p">,</span><span class="nx">endHandler</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Expected query as a string&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
