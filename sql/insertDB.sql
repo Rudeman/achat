@@ -1,8 +1,8 @@
-INSERT OR REPLACE INTO User VALUES (1,"testowy","testowy@gmail.com","testowy",0,2,"/assets/images/avatars/ashamed-woman.jpg",0,1);
-INSERT OR REPLACE INTO User VALUES (2,"radek","radek@gmail.com","radek",0,3,"/assets/images/avatars/blackandwhite.jpg",1,1);
-INSERT OR REPLACE INTO User VALUES (3,"slawek","slawek@gmail.com","slawek",0,5,"/assets/images/avatars/ashamed-woman.jpg",0,1);
-INSERT OR REPLACE INTO User VALUES (4,"czarek","maciekrei@gmail.com","czarek",0,3,"/assets/images/avatars/blackandwhite.jpg",0,0);
-INSERT OR REPLACE INTO User VALUES (5,"darek","darek@gmail.com","darek",0,1,"/assets/images/avatars/ashamed-woman.jpg",0,0);
+INSERT OR REPLACE INTO User VALUES (1,"testowy","testowy@gmail.com","testowy",0,2,"/assets/images/avatars/ashamed-woman.jpg",0,1,null);
+INSERT OR REPLACE INTO User VALUES (2,"radek","radek@gmail.com","radek",0,3,"/assets/images/avatars/blackandwhite.jpg",1,1,null);
+INSERT OR REPLACE INTO User VALUES (3,"slawek","slawek@gmail.com","slawek",0,5,"/assets/images/avatars/ashamed-woman.jpg",0,1,null);
+INSERT OR REPLACE INTO User VALUES (4,"czarek","maciekrei@gmail.com","czarek",0,3,"/assets/images/avatars/blackandwhite.jpg",0,0,null);
+INSERT OR REPLACE INTO User VALUES (5,"darek","darek@gmail.com","darek",0,1,"/assets/images/avatars/ashamed-woman.jpg",0,0,null);
 
 INSERT OR REPLACE INTO Contact VALUES (1,2,0,1);
 INSERT OR REPLACE INTO Contact VALUES (1,3,1,1);
@@ -28,14 +28,16 @@ INSERT OR REPLACE INTO Room VALUES (3,"zoo",1059684115965,1309684115965,640,960)
 
 INSERT OR REPLACE INTO UserRoom VALUES (1,1,0,1,1,1);
 INSERT OR REPLACE INTO UserRoom VALUES (2,1,0,1,1,0);
-INSERT OR REPLACE INTO UserRoom VALUES (3,1,0,1,1,0);
 
-INSERT OR REPLACE INTO UserRoom VALUES (2,2,0,1,1,1);
+INSERT OR REPLACE INTO UserRoom VALUES (1,2,0,1,1,1);
 INSERT OR REPLACE INTO UserRoom VALUES (3,2,0,0,0,0);
 
 INSERT OR REPLACE INTO UserRoom VALUES (1,3,0,1,0,0);
 INSERT OR REPLACE INTO UserRoom VALUES (4,3,0,1,1,1);
-INSERT OR REPLACE INTO UserRoom VALUES (5,3,0,1,0,0);
+
+INSERT OR REPLACE INTO UserRoom VALUES (2,4,0,1,0,0);
+INSERT OR REPLACE INTO UserRoom VALUES (4,4,0,1,1,1);
+
 
 INSERT OR REPLACE INTO Consumer VALUES (1,"ab","cd","Android",1,"rw","MobDroid","MobSharing on Andorid","","");
 INSERT OR REPLACE INTO Consumer VALUES (2,"as","df","iPhone",2,"rw","iMob","MobSharing on iPhone","","");

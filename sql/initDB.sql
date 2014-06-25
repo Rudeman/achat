@@ -24,7 +24,8 @@ CREATE  TABLE IF NOT EXISTS User (
   lastLogin NUMERIC NOT NULL,
   avatar TEXT NOT NULL,
   permitPUSH INT NOT NULL,
-  permitEmail INT NOT NULL
+  permitEmail INT NOT NULL,
+  regId TEXT
 );
 
 CREATE  TABLE IF NOT EXISTS Room (

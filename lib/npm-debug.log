@@ -1,0 +1,55 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install', 'node-gcm' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/saw/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose caching /home/saw/achat/lib/node_modules/formidable/package.json
+verbose caching /home/saw/achat/lib/node_modules/nodeunit/package.json
+verbose caching /home/saw/achat/lib/node_modules/socket.io/package.json
+verbose caching /home/saw/achat/lib/node_modules/sqlite3/package.json
+verbose loadDefaults sqlite3@2.2.3
+verbose caching /home/saw/achat/lib/node_modules/multiparty/package.json
+verbose loadDefaults multiparty@3.2.9
+verbose caching /home/saw/achat/lib/node_modules/nodemailer/package.json
+verbose has wscript [ undefined,
+verbose has wscript   { file: '/home/saw/achat/lib/node_modules/node-sqlite3/package.json',
+verbose has wscript     contributors: false,
+verbose has wscript     serverjs: false,
+verbose has wscript     wscript: true } ]
+verbose caching /home/saw/achat/lib/node_modules/node-sqlite3/package.json
+verbose loadDefaults sqlite3@2.1.1
+verbose cache add [ 'node-gcm', null ]
+silly cache add: name, spec, args [ undefined, 'node-gcm', [ 'node-gcm', null ] ]
+verbose parsed url { pathname: 'node-gcm', path: 'node-gcm', href: 'node-gcm' }
+verbose addNamed [ 'node-gcm', '' ]
+verbose addNamed [ null, '' ]
+silly name, range, hasData [ 'node-gcm', '', false ]
+verbose raw, before any munging node-gcm
+verbose url resolving [ 'https://registry.npmjs.org/', './node-gcm' ]
+verbose url resolved https://registry.npmjs.org/node-gcm
+http GET https://registry.npmjs.org/node-gcm
+ERR! Error: failed to fetch from registry: node-gcm
+ERR!     at /usr/share/npm/lib/utils/npm-registry-client/get.js:139:12
+ERR!     at cb (/usr/share/npm/lib/utils/npm-registry-client/request.js:31:9)
+ERR!     at Request._callback (/usr/share/npm/lib/utils/npm-registry-client/request.js:136:18)
+ERR!     at Request.callback (/usr/lib/nodejs/request/main.js:119:22)
+ERR!     at Request.<anonymous> (/usr/lib/nodejs/request/main.js:212:58)
+ERR!     at Request.emit (events.js:88:20)
+ERR!     at ClientRequest.<anonymous> (/usr/lib/nodejs/request/main.js:412:12)
+ERR!     at ClientRequest.emit (events.js:67:17)
+ERR!     at HTTPParser.onIncoming (http.js:1261:11)
+ERR!     at HTTPParser.onHeadersComplete (http.js:102:31)
+ERR! You may report this log at:
+ERR!     <http://bugs.debian.org/npm>
+ERR! or use
+ERR!     reportbug --attach /home/saw/achat/lib/npm-debug.log npm
+ERR! 
+ERR! System Linux 3.11.0-23-generic
+ERR! command "node" "/usr/bin/npm" "install" "node-gcm"
+ERR! cwd /home/saw/achat/lib
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! message failed to fetch from registry: node-gcm
+verbose exit [ 1, true ]
